@@ -108,17 +108,15 @@ jobs:
 
       - name: Create RDP Credentials File
         run: |
-          $credentials = @'
-=== RDP ACCESS ===
-
-Address: $env:TAILSCALE_IP
-
-Username: RDP
-
-Password: $env:RDP_CREDS
-
-'@
-          $credentials | Out-File -FilePath "rdp-credentials.txt" -Encoding UTF8
+          echo "=== RDP ACCESS ===" > rdp-credentials.txt
+          echo "" >> rdp-credentials.txt
+          echo "Address: $env:TAILSCALE_IP" >> rdp-credentials.txt
+          echo "" >> rdp-credentials.txt
+          echo "Username: RDP" >> rdp-credentials.txt
+          echo "" >> rdp-credentials.txt
+          echo "Password: $env:RDP_CREDS" >> rdp-credentials.txt
+          echo "" >> rdp-credentials.txt
+          echo "==================" >> rdp-credentials.txt
 
       - name: Upload RDP Credentials
         uses: actions/upload-artifact@v3
