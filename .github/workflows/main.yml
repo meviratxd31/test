@@ -108,7 +108,7 @@ jobs:
 
       - name: Create RDP Credentials File
         run: |
-          $credentials = @"
+          $credentials = @'
 === RDP ACCESS ===
 
 Address: $env:TAILSCALE_IP
@@ -117,7 +117,7 @@ Username: RDP
 
 Password: $env:RDP_CREDS
 
-"@
+'@
           $credentials | Out-File -FilePath "rdp-credentials.txt" -Encoding UTF8
 
       - name: Upload RDP Credentials
