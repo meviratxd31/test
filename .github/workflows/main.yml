@@ -89,7 +89,7 @@ jobs:
       - name: Verify RDP Accessibility
         run: |
           Write-Host "Tailscale IP: $env:TAILSCALE_IP"
-          
+
           # Test connectivity using Test-NetConnection against the Tailscale IP on port 3389
           $testResult = Test-NetConnection -ComputerName $env:TAILSCALE_IP -Port 3389
           if (-not $testResult.TcpTestSucceeded) {
@@ -97,6 +97,34 @@ jobs:
               exit 1
           }
           Write-Host "TCP connectivity successful!"
+
+      - name: Output RDP Credentials
+        run: |
+          Write-Host "`n=== RDP ACCESS ==="
+          Write-Host "Address: $env:TAILSCALE_IP"
+          Write-Host "Username: RDP"
+          Write-Host "Password: $env:RDP_CREDS"
+          Write-Host "==================`n"
+
+      - name: Create RDP Credentials File
+        run: |
+          $credentials = @"
+=== RDP ACCESS ===
+
+Address: $env:TAILSCALE_IP
+
+Username: RDP
+
+Password: $env:RDP_CREDS
+
+"@
+          $credentials | Out-File -FilePath "rdp-credentials.txt" -Encoding UTF8
+
+      - name: Upload RDP Credentials
+        uses: actions/upload-artifact@v3
+        with:
+          name: rdp-credentials
+          path: rdp-credentials.txt
 
       - name: Maintain Connection
         run: |
